@@ -23,5 +23,6 @@
 --  The first elements of the result pair are the arguments for the objective function at the minimum. 
 --  The second elements are the lagrange multipliers.
 module Numeric.AD.Lagrangian (
-    solve) where
-import Numeric.AD.Lagrangian.Internal (solve, feasible)
+    solve,
+    Constraint) where
+import Numeric.AD.Lagrangian.Internal (solve, feasible, Constraint)
