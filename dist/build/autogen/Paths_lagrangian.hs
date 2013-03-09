@@ -14,12 +14,12 @@ catchIO = Exception.catch
 
 
 version :: Version
-version = Version {versionBranch = [0,2,0,1], versionTags = []}
+version = Version {versionBranch = [0,3,0,0], versionTags = []}
 bindir, libdir, datadir, libexecdir :: FilePath
 
 bindir     = "/Users/jfischoff/Library/Haskell/lib//bin"
-libdir     = "/Users/jfischoff/Library/Haskell/lib//lib/lagrangian-0.2.0.1/x86_64/ghc-7.6.1"
-datadir    = "/Users/jfischoff/Library/Haskell/lib//share/lagrangian-0.2.0.1"
+libdir     = "/Users/jfischoff/Library/Haskell/lib//lib/lagrangian-0.3.0.0/x86_64/ghc-7.6.1"
+datadir    = "/Users/jfischoff/Library/Haskell/lib//share/lagrangian-0.3.0.0"
 libexecdir = "/Users/jfischoff/Library/Haskell/lib//libexec"
 
 getBinDir, getLibDir, getDataDir, getLibexecDir :: IO FilePath
