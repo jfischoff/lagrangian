@@ -37,7 +37,7 @@ solve :: Double
       -- ^ The arity of the objective function which should equal the arity of 
       --   the constraints.
       -> Either (Result, Statistics) (S.Vector Double, S.Vector Double) 
-      -- ^ Either an explaination of why the gradient descent failed or a pair 
+      -- ^ Either an explanation of why the gradient descent failed or a pair 
       --   containing the arguments at the minimum and the lagrange multipliers
 solve tolerance toMin constraints argCount = result where
     -- The function to minimize for the langrangian is the squared gradient
@@ -85,7 +85,7 @@ squaredGrad f vs = sum . fmap (\x -> x*x) . grad f $ vs
 
 -- | WARNING. Experimental.
 --   This is not a true feasibility test for the function. I am not sure 
---   exactly how to implement that. This just checks the feasiblility at point.
+--   exactly how to implement that. This just checks the feasiblility at a point.
 --   If this ever returns false, 'solve' can fail.
 feasible :: (forall s r. (Mode s, Mode r) => [AD2 s r Double] -> AD2 s r Double)
          -> (forall s r. (Mode s, Mode r) => [Constraint (AD2 s r Double)] )

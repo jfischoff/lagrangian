@@ -1,11 +1,10 @@
 -- |Numerically solve convex lagrange multiplier problems with conjugate gradient descent. 
 --  
---  For example, find the maximum entropy with the constraint that the probabilities add
---  up to one. 
+--  Here is an example from the Wikipedia page on Lagrange multipliers.
+--  Maximize f(x, y) = x + y, subject to the constraint x^2 + y^2 = 1 
 --  
---  
---  >>> solve 0.00001 (negate . sum . map (\x -> x * log x)) [sum <=> 1] 3
---  ([0.33, 0.33, 0.33], [-0.09])
+--  >>> solve 0.00001 (\[x, y] -> x + y) [\[x, y] -> x^2 + y^2 <=> 1] 2
+--  Right ([0.707,0.707], [-0.707])
 --  
 --  The first elements of the result pair are the arguments for the objective function at the minimum. 
 --  The second elements are the lagrange multipliers.

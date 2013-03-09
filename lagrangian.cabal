@@ -24,7 +24,7 @@ description:
  .
  @
    \> solve 0.00001 (negate . sum . map (\x -> x * log x)) [sum \<=\> 1] 3
-   ([0.33, 0.33, 0.33], [-0.09])
+   Right ([0.33, 0.33, 0.33], [-0.09])
  @
  .
  The first elements of the result pair are the arguments for the 
