@@ -16,7 +16,7 @@ main = defaultMain [
     
     
 noConstraints = (fst <$> actual) @?= Right expected where
-    actual    = solve 0.00001 f [] 1
+    actual    = minimize 0.00001 f [] 1
     expected  = S.fromList [1]
     f [x] = -(x - 1) ^2
     
@@ -24,7 +24,7 @@ noConstraints = (fst <$> actual) @?= Right expected where
 --    x =~= y :: a -> a -> Bool
 
 entropyTest = (S.sum . S.map abs $ S.zipWith (-) actual expected) < 0.02 @?= True  where
-    Right actual = fst <$> solve 0.00001 f [(\xs -> sum xs, 1)] 3
+    Right actual = fst <$> maximize 0.00001 f [(\xs -> sum xs, 1)] 3
     expected  = S.fromList [0.33, 0.33, 0.33]
     f :: Floating a => [a] -> a
     f = negate . sum . map (\x -> x * log x)

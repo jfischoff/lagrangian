@@ -27,7 +27,7 @@ type AD2 s r a = AD s (AD r Double)
 -- | This is the lagrangian multiplier solver. It is assumed that the 
 --   objective function and all of the constraints take in the 
 --   same amount of arguments.
-solve :: Double
+minimize :: Double
       -> (forall s r. (Mode s, Mode r) => [AD2 s r Double] -> AD2 s r Double) 
         -- ^ The function to minimize
       -> (forall s r. (Mode s, Mode r) => [Constraint (AD2 s r Double)] ) 
@@ -39,7 +39,7 @@ solve :: Double
       -> Either (Result, Statistics) (S.Vector Double, S.Vector Double) 
       -- ^ Either an explanation of why the gradient descent failed or a pair 
       --   containing the arguments at the minimum and the lagrange multipliers
-solve tolerance toMin constraints argCount = result where
+minimize tolerance toMin constraints argCount = result where
     -- The function to minimize for the langrangian is the squared gradient
     obj argsAndLams = 
         squaredGrad (lagrangian toMin constraints argCount) argsAndLams
@@ -61,6 +61,22 @@ solve tolerance toMin constraints argCount = result where
        (vs, ToleranceStatisfied, _) -> Right (S.take argCount vs, 
                                               S.drop argCount vs) 
        (_, x, y) -> Left (x, y)
+       
+-- | Finding the maximum is the same as the minimum with the objective function inverted
+maximize :: Double
+      -> (forall s r. (Mode s, Mode r) => [AD2 s r Double] -> AD2 s r Double) 
+        -- ^ The function to maximize
+      -> (forall s r. (Mode s, Mode r) => [Constraint (AD2 s r Double)] ) 
+      -- ^ The constraints as pairs @g \<=\> c@ which represent equations 
+      --   of the form @g(x, y, ...) = c@
+      -> Int 
+      -- ^ The arity of the objective function which should equal the arity of 
+      --   the constraints.
+      -> Either (Result, Statistics) (S.Vector Double, S.Vector Double) 
+      -- ^ Either an explanation of why the gradient descent failed or a pair 
+      --   containing the arguments at the minimum and the lagrange multipliers
+maximize tolerance toMax constraints argCount = 
+    minimize tolerance (negate1 . toMax) constraints argCount
 
 lagrangian :: Num a 
            => ([a] -> a)
@@ -72,7 +88,7 @@ lagrangian f constraints argCount argsAndLams = result where
     args = take argCount argsAndLams
     lams = drop argCount argsAndLams
     
-    -- (g, c) <=> g(x, y, ...) = c <=> g(x, y, ...) - c = 0
+    -- g(x, y, ...) = c <=> g(x, y, ...) - c = 0
     appliedConstraints = fmap (\(f, c) -> f args - c) constraints
     
     -- L(x, y, ..., lam0, ...) = f(x, y, ...) + lam0 * (g0 - c0) ... 
