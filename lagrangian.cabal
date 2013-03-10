@@ -10,10 +10,10 @@ name:                lagrangian
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.3.0.1
+version:             0.4.0.1
 
 -- A short (one-line) description of the package.
-synopsis:            Solve lagrange multiplier problems
+synopsis:            Solve Lagrange multiplier problems
 
 -- A longer description of the package.
 description:      
@@ -26,13 +26,13 @@ description:
  Maximize f(x, y) = x + y, subject to the constraint x^2 + y^2 = 1 
  .
  @
-   \> maximize 0.00001 (\[x, y] -> x + y) [(\[x, y] -> x^2 + y^2) <=> 1] 2
+   \> maximize 0.00001 (\\[x, y] -> x + y) [(\\[x, y] -> x^2 + y^2) \<=\> 1] 2
    Right ([0.707,0.707], [-0.707])
  @
  .
  For more information look here: <http://en.wikipedia.org/wiki/Lagrange_multiplier#Example_1>
  .
- For example, find the maximum entropy with the constraint that the probabilities sum
+ For example, to find the maximum entropy with the constraint that the probabilities sum
  to one. 
  .
  @
