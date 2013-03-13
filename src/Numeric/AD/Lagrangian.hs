@@ -11,6 +11,7 @@
 module Numeric.AD.Lagrangian (
     -- *** Helper types
     AD2,
+    FU(..),
     (<=>),
     Constraint,
     -- ** Solver
@@ -18,4 +19,5 @@ module Numeric.AD.Lagrangian (
     minimize,
     -- *** Experimental features
     feasible) where
-import Numeric.AD.Lagrangian.Internal (AD2, (<=>), maximize, minimize, feasible, Constraint)
+import Numeric.AD.Lagrangian.Internal (AD2, FU(..), 
+    (<=>), maximize, minimize, feasible, Constraint)

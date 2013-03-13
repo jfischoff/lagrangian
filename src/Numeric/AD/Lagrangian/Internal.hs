@@ -13,16 +13,17 @@ import qualified Data.Packed.Matrix as M
 import Numeric.AD.Internal.Tower
 
 infixr 1 <=>
--- | This is just a little bit of sugar for (,) to make constraints look like 
---  equals
-(<=>) :: ([a] -> a) -> a -> Constraint a
-g <=> c = (g,c)
--- | The type for the contraints.
---   Given a constraint @g(x, y, ...) = c@, we would represent it as @(g, c)@.
---   or with sugar @g@ '<=>' @c@
-type Constraint a = ([a] -> a, a)
+-- | Build a 'Constraint' from a function and a constant
+(<=>) :: (forall s r. (Mode s, Mode r) => [AD2 s r a] -> AD2 s r a) -> a -> Constraint a
+g <=> c = (FU g,c)
 
-type AD2 s r a = AD s (AD r Double)
+-- | A constraint of the form @g(x, y, ...) = c@. See '<=>' for constructing a 'Constraint'.
+type Constraint a = (FU a, a)
+
+type AD2 s r a = AD s (AD r a)
+
+-- | A newtype wrapper for working with the rank 2 types constraint functions. 
+newtype FU a = FU {unFU :: forall s r. (Mode s, Mode r) => [AD2 s r a] -> AD2 s r a}
 
 -- | This is the lagrangian multiplier solver. It is assumed that the 
 --   objective function and all of the constraints take in the 
@@ -30,7 +31,7 @@ type AD2 s r a = AD s (AD r Double)
 minimize :: Double
       -> (forall s r. (Mode s, Mode r) => [AD2 s r Double] -> AD2 s r Double) 
         -- ^ The function to minimize
-      -> (forall s r. (Mode s, Mode r) => [Constraint (AD2 s r Double)] ) 
+      -> [Constraint Double]
       -- ^ The constraints as pairs @g \<=\> c@ which represent equations 
       --   of the form @g(x, y, ...) = c@
       -> Int 
@@ -44,8 +45,7 @@ minimize tolerance toMin constraints argCount = result where
     obj argsAndLams = 
         squaredGrad (lagrangian toMin constraints argCount) argsAndLams
     
-    -- The mode does matter but I need to add annotation for the type checker
-    constraintCount = length (constraints :: [Constraint (AD Tower (AD Tower Double))])
+    constraintCount = length constraints 
     
     -- perhaps this should be exposed
     guess = U.replicate (argCount + constraintCount) (1.0 :: Double) 
@@ -66,7 +66,7 @@ minimize tolerance toMin constraints argCount = result where
 maximize :: Double
       -> (forall s r. (Mode s, Mode r) => [AD2 s r Double] -> AD2 s r Double) 
         -- ^ The function to maximize
-      -> (forall s r. (Mode s, Mode r) => [Constraint (AD2 s r Double)] ) 
+      -> [Constraint Double] 
       -- ^ The constraints as pairs @g \<=\> c@ which represent equations 
       --   of the form @g(x, y, ...) = c@
       -> Int 
@@ -78,18 +78,18 @@ maximize :: Double
 maximize tolerance toMax constraints argCount = 
     minimize tolerance (negate1 . toMax) constraints argCount
 
-lagrangian :: Num a 
-           => ([a] -> a)
+lagrangian :: (Num a, Mode s, Mode r)
+           => (forall s r. (Mode s, Mode r) => [AD2 s r a] -> AD2 s r a) 
            -> [Constraint a]
            -> Int
-           -> [a]  
-           -> a
+           -> [AD2 s r a]  
+           -> AD2 s r a
 lagrangian f constraints argCount argsAndLams = result where
     args = take argCount argsAndLams
     lams = drop argCount argsAndLams
     
     -- g(x, y, ...) = c <=> g(x, y, ...) - c = 0
-    appliedConstraints = fmap (\(f, c) -> f args - c) constraints
+    appliedConstraints = fmap (\(FU f, c) -> f args - (auto . auto) c) constraints
     
     -- L(x, y, ..., lam0, ...) = f(x, y, ...) + lam0 * (g0 - c0) ... 
     result = f args + (sum . zipWith (*) lams $ appliedConstraints)
@@ -104,7 +104,7 @@ squaredGrad f vs = sum . fmap (\x -> x*x) . grad f $ vs
 --   exactly how to implement that. This just checks the feasiblility at a point.
 --   If this ever returns false, 'solve' can fail.
 feasible :: (forall s r. (Mode s, Mode r) => [AD2 s r Double] -> AD2 s r Double)
-         -> (forall s r. (Mode s, Mode r) => [Constraint (AD2 s r Double)] )
+         -> [Constraint Double]
          -> [Double]
          -> Bool
 feasible toMin constraints points = result where

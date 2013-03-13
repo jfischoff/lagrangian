@@ -23,8 +23,10 @@ noConstraints = (fst <$> actual) @?= Right expected where
 --class Approximate a where
 --    x =~= y :: a -> a -> Bool
 
+
+
 entropyTest = (S.sum . S.map abs $ S.zipWith (-) actual expected) < 0.02 @?= True  where
-    Right actual = fst <$> maximize 0.00001 f [(\xs -> sum xs, 1)] 3
+    Right actual = fst <$> maximize 0.00001 f [sum <=> 1] 3
     expected  = S.fromList [0.33, 0.33, 0.33]
     f :: Floating a => [a] -> a
     f = negate . sum . map (\x -> x * log x)
