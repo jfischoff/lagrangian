@@ -97,7 +97,7 @@ lagrangian f constraints argCount argsAndLams = result where
 squaredGrad :: Num a
             => (forall s. Mode s => [AD s a] -> AD s a)
             -> [a] -> a
-squaredGrad f vs = sum . fmap (\x -> x*x) . grad f $ vs
+squaredGrad f vs = sum . fmap (^2) . grad f $ vs
 
 -- | WARNING. Experimental.
 --   This is not a true feasibility test for the function. I am not sure
