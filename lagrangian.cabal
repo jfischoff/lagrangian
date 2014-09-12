@@ -1,5 +1,5 @@
 name:                lagrangian
-version:             0.5.0.0
+version:             0.6.0.0
 synopsis:            Solve Lagrange multiplier problems
 description:
  Numerically solve convex Lagrange multiplier problems with conjugate gradient descent.
@@ -41,11 +41,13 @@ cabal-version:       >=1.8
 library
   exposed-modules: Numeric.AD.Lagrangian
   other-modules: Numeric.AD.Lagrangian.Internal
+  ghc-options:          -Wall
   build-depends:    base >=4.5 && < 5,
                     nonlinear-optimization ==0.3.*,
                     vector ==0.10.*,
-                    ad ==3.4.*,
-                    hmatrix == 0.14.*
+                    ad >= 4 && < 5,
+                    hmatrix >= 0.14 && < 0.17,
+                    reflection == 1.5.*
   hs-source-dirs:      src
 
 Test-Suite tests
@@ -55,8 +57,9 @@ Test-Suite tests
   build-depends: base >=4.5 && < 5,
                  nonlinear-optimization ==0.3.*,
                  vector ==0.10.*,
-                 ad ==3.4.*,
-                 hmatrix == 0.14.*,
+                 ad >= 4 && <5,
+                 hmatrix >= 0.14 && < 0.17,
+                 reflection == 1.5.*,
                  test-framework ==0.8.*,
                  test-framework-hunit ==0.3.*,
                  test-framework-quickcheck2 ==0.3.*,
