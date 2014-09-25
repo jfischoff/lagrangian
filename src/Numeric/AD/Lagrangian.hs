@@ -1,23 +1,31 @@
--- |Numerically solve convex lagrange multiplier problems with conjugate gradient descent. 
+-- | Numerically solve convex Lagrange-multiplier problems with conjugate
+--   gradient descent. 
 --  
---  Here is an example from the Wikipedia page on Lagrange multipliers.
---  Maximize f(x, y) = x + y, subject to the constraint x^2 + y^2 = 1 
---  
---  >>> maximize 0.00001 (\[x, y] -> x + y) [(\[x, y] -> x^2 + y^2) <=> 1] 2
---  Right ([0.707,0.707], [-0.707])
---  
---  The first elements of the result pair are the arguments for the objective function at the minimum. 
---  The second elements are the lagrange multipliers.
+--   Consider an example from the Wikipedia page on Lagrange multipliers in
+--   which we want to maximize the function f(x, y) = x + y, subject to the
+--   constraint x^2 + y^2 = 1:
+--   
+--   >>> maximize (\[x, y] -> x + y) [(\[x, y] -> x^2 + y^2) <=> 1] 0.00001 2
+--   Right ([0.707,0.707], [-0.707])
+--   
+--   The 'Right' indicates success; the first element of the pair is the
+--   argument of the objective function at the maximum, and the second element
+--   is a list of Lagrange multipliers.
+
 module Numeric.AD.Lagrangian (
-    -- *** Helper types
-    AD2,
-    FU(..),
-    (<=>),
+    -- *** Constraint type
     Constraint,
-    -- ** Solver
+    (<=>),
+    -- ** Optimizers
     maximize,
     minimize,
     -- *** Experimental features
     feasible) where
-import Numeric.AD.Lagrangian.Internal (AD2, FU(..), 
-    (<=>), maximize, minimize, feasible, Constraint)
+
+import Numeric.AD.Lagrangian.Internal
+    ( Constraint
+    , (<=>)
+    , maximize
+    , minimize
+    , feasible
+    )
