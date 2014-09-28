@@ -7,15 +7,9 @@ import qualified Data.Vector.Storable as S
 import qualified Data.Packed.Vector as V
 import qualified Data.Packed.Matrix as M
 
-import Data.Reflection
-
 import GHC.IO (unsafePerformIO)
 
 import Numeric.AD
-import Numeric.AD.Internal.Reverse
---import Numeric.AD.Internal.Sparse
---import Numeric.AD.Internal.On
-
 import Numeric.Optimization.Algorithms.HagerZhang05
 import Numeric.LinearAlgebra.Algorithms
 
