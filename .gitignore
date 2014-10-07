@@ -41,6 +41,7 @@ ehthumbs.db
 Icon?
 Thumbs.db
 
+dist
 *.p_o
 *.hi
 *.*~
