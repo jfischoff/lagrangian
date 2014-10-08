@@ -41,13 +41,7 @@ instance Traversable (IList a) where
 -- the constraints must take the same number of arguments.
 minimize :: forall (argCount :: Nat). 
             KnownNat argCount
-         => 
-            ( forall f a.
-              ( Floating a
-              , Traversable (f argCount)
-              ) 
-            => f argCount a -> a
-            )
+         => (forall a. Floating a => IList argCount a -> a)
          -- ^ The objective function to minimize
          -> [Constraint]
          -- ^ A list of constraints @g \<=\> c@ corresponding to equations of
@@ -68,13 +62,7 @@ minimize f constraints tolerance
 -- the constraints must take the same number of arguments.
 maximize :: forall (argCount :: Nat). 
             KnownNat argCount
-         =>
-            ( forall f a.
-              ( Floating a
-              , Traversable (f argCount)
-              ) 
-            => f argCount a -> a
-            )
+         => (forall a. Floating a => IList argCount a -> a)
          -- ^ The objective function to minimize
          -> [Constraint]
          -- ^ A list of constraints @g \<=\> c@ corresponding to equations of
