@@ -4,6 +4,8 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE DeriveTraversable #-}
 
 module Numeric.AD.Lagrangian.Safe where
 import Numeric.AD.Lagrangian.Internal (Constraint (..))
@@ -26,16 +28,9 @@ import Control.Applicative ((<$>))
 
 data Proxy k = Proxy
 
-data IList (argCount :: Nat) a = IList [a]
-
-instance Functor (IList n) where
-  fmap f (IList xs) = IList $ fmap f xs
-
-instance Foldable (IList a) where
-  foldMap f (IList xs) = foldMap f xs
-  
-instance Traversable (IList a) where
-  traverse f (IList xs) = IList <$> traverse f xs
+newtype IList (argCount :: Nat) a = IList
+    { unIList :: [a]
+    } deriving (Functor, Foldable, Traversable)
 
 -- | Numerically minimize the Langrangian. The objective function and each of
 -- the constraints must take the same number of arguments.
