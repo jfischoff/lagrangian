@@ -39,7 +39,7 @@ build-type:          Simple
 cabal-version:       >=1.8
 
 library
-  exposed-modules: Numeric.AD.Lagrangian, Numeric.AD.Lagrangian.Safe
+  exposed-modules: Numeric.AD.Lagrangian
   other-modules: Numeric.AD.Lagrangian.Internal
   ghc-options:          -Wall
   build-depends:    base >=4.5 && < 5,
