@@ -27,7 +27,7 @@ f <=> c = Constraint (f, c)
 
 -- | Numerically minimize the Langrangian. The objective function and each of
 -- the constraints must take the same number of arguments.
-minimize :: (forall a t. Floating a => [a] -> a)
+minimize :: (forall a. (Floating a) => [a] -> a)
          -- ^ The objective function to minimize
          -> [Constraint]
          -- ^ A list of constraints @g \<=\> c@ corresponding to equations of
@@ -66,7 +66,7 @@ minimize f constraints tolerance argCount = result where
 
 -- | Numerically maximize the Langrangian. The objective function and each of
 -- the constraints must take the same number of arguments.
-maximize :: (forall a. Floating a => [a] -> a)
+maximize :: (forall a. (Floating a) => [a] -> a)
          -- ^ The objective function to minimize
          -> [Constraint]
          -- ^ A list of constraints @g \<=\> c@ corresponding to equations of
@@ -84,7 +84,7 @@ maximize :: (forall a. Floating a => [a] -> a)
 maximize f = minimize $ negate . f
 
 lagrangian :: (Floating a)
-           => (forall b. Floating b => [b] -> b)
+           => (forall b. (Floating b) => [b] -> b)
            -> [Constraint]
            -> Int
            -> [a]
