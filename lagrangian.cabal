@@ -1,5 +1,5 @@
 name:                lagrangian
-version:             0.6.0.0
+version:             0.6.0.1
 synopsis:            Solve Lagrange multiplier problems
 description:
  Numerically solve convex Lagrange multiplier problems with conjugate gradient descent.
@@ -31,7 +31,7 @@ description:
 homepage:            http://github.com/jfischoff/lagrangian
 license:             BSD3
 license-file:        LICENSE
-author:              Jonathan Fischoff
+author:              (c) Jonathan Fischoff 2012-2014, (c) Eric Pashman 2014  
 maintainer:          jonathangfischoff@gmail.com
 -- copyright:
 category:            Math
