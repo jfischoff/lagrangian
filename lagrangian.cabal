@@ -50,15 +50,17 @@ library
   hs-source-dirs:      src
 
 Test-Suite tests
+  ghc-options:    -Wall
   Hs-Source-Dirs: src, tests
   type:       exitcode-stdio-1.0
   main-is:    Main.hs
   build-depends: base >=4.5 && < 5,
-                 nonlinear-optimization ==0.3.*,
+                 tasty >= 0.8 && < 0.9,
+                 tasty-hunit >= 0.8 && < 1.0,
+                 tasty-quickcheck >= 0.8 && < 1.0,
                  vector ==0.10.*,
-                 ad >= 4 && <5,
                  hmatrix >= 0.14 && < 0.17,
-                 test-framework ==0.8.*,
-                 test-framework-hunit ==0.3.*,
-                 test-framework-quickcheck2 ==0.3.*,
-                 HUnit == 1.2.*
+                 ad >= 4 && < 5,
+                 nonlinear-optimization ==0.3.*,
+                 lagrangian
+
