@@ -27,15 +27,15 @@ unitTests = testGroup "Unit Tests"
   ]
 
 noConstraints :: Assertion
-noConstraints = (fst <$> actual) @?= Right expected where
-    actual    = minimize quadratic1 [] 0.00001 1
-    expected  = S.fromList [1]
+noConstraints = actual @?= expected where
+    Right (actual, _) = minimize quadratic1 [] 0.00001 1
+    expected = S.fromList [1]
  
--- This is now duplicative of the `uniformMaxEnt` property below.
+-- This is now duplicative of the `uniformMaxEnt` property below. ...
 entropyTest :: Assertion
-entropyTest = (totalAbsDiff actual expected < 0.02) @?= True where
-    Right actual = fst <$> maximize entropy [sum <=> 1] 0.00001 3
-    expected  = S.fromList [0.33, 0.33, 0.33]
+entropyTest = assert $ totalAbsDiff actual expected < 0.02 where
+    Right (actual, _) = maximize entropy [sum <=> 1] 0.00001 3
+    expected = S.fromList [0.33, 0.33, 0.33]
 
 --------------------------------------------------------------------------------
 -- QuickCheck properties
@@ -46,11 +46,11 @@ properties = testGroup "Properties"
   [ testProperty "Unconstrained max-ent distribution is uniform" uniformMaxEnt
   ]
 
--- With only the normalization constraint, the uniform distribution is the
--- maximum-entropy distribution for a sample space of any finite cardinality.
+-- With only the normalization constraint, the uniform is the maximum-entropy
+-- distribution over a sample space of any finite cardinality.
 uniformMaxEnt :: Int -> Bool
 uniformMaxEnt n = totalAbsDiff actual expected < 0.01 where
-    Right (actual, _) = maximize entropy [sum <=> 1] (1e-5) n
+    Right (actual, _) = maximize entropy [sum <=> 1] (1e-3) n
     expected = S.replicate n $ 1 / (fromIntegral n)
 
 --------------------------------------------------------------------------------
